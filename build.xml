@@ -99,7 +99,7 @@ Created    : 09.05.2016, Hartwig Thomas
           <and>
             <isset property="version"/>
             <isset property="revold"/>
-            <isset property="java7rtjar"/>
+            <isset property="java8rtjar"/>
           </and>
         </not>
       </condition>
@@ -216,7 +216,7 @@ Created    : 09.05.2016, Hartwig Thomas
     </touch>
     <javac debug="true" debuglevel="${debuglevel}"
       includeantruntime="false"
-      bootclasspath="${java7rtjar}"
+      bootclasspath="${java8rtjar}"
       source="${source}" 
       target="${target}"
       encoding="UTF-8"
@@ -249,7 +249,7 @@ Created    : 09.05.2016, Hartwig Thomas
 		<!-- build the tests -->
     <javac debug="true" debuglevel="${debuglevel}"
       includeantruntime="false"
-      bootclasspath="${java7rtjar}"
+      bootclasspath="${java8rtjar}"
       source="${source}" 
       target="${target}"
       encoding="UTF-8"
