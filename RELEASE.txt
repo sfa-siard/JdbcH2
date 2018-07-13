@@ -1,8 +1,12 @@
-Release Notes for JdbcH2 2.0
+Release Notes for JdbcH2 2.1
 ============================
+
+2.1.0
+Release for JAVA 10
+ 
+2.0.34
+.gitattributes added.
 
 2.0.30
 First release of JdbcH2 on GitHub.
 
-2.0.34
-.gitattributes added.
