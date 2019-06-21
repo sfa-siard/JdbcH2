@@ -213,16 +213,13 @@ public class H2DatabaseMetaData
    * {@inheritDoc}
    */
   @Override
-  public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
-    if (catalog != null) {
-      throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
-    }
-
+  public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException
+  {
     StringBuilder sb = new StringBuilder();
 
     // get the table from the INFORMATION SCHEMA
     sb.append("SELECT\r\n" +
-        "  NULL AS TABLE_CAT,\r\n" +
+        "  t.TABLE_CATALOG AS TABLE_CAT,\r\n" +
         "  t.TABLE_SCHEMA as TABLE_SCHEM,\r\n" +
         "  t.TABLE_NAME,\r\n" +
         "  CASE t.TABLE_TYPE\r\n" +
