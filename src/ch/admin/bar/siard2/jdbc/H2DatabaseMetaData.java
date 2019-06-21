@@ -208,6 +208,81 @@ public class H2DatabaseMetaData
     return rs;
   } /* getSchemas */
   
+  /* ------------------------------------------------------------------------ */
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException {
+    if (catalog != null) {
+      throw new SQLException("MySQL does not support catalogs, argument must be NULL.");
+    }
+
+    StringBuilder sb = new StringBuilder();
+
+    // get the table from the INFORMATION SCHEMA
+    sb.append("SELECT\r\n" +
+        "  NULL AS TABLE_CAT,\r\n" +
+        "  t.TABLE_SCHEMA as TABLE_SCHEM,\r\n" +
+        "  t.TABLE_NAME,\r\n" +
+        "  CASE t.TABLE_TYPE\r\n" +
+        "      WHEN 'BASE TABLE' THEN 'TABLE'\r\n" +
+        "      ELSE t.TABLE_TYPE\r\n" +
+        "  END AS TABLE_TYPE,\r\n" +
+        "  t.REMARKS AS REMARKS,\r\n" +
+        "  NULL AS TYPE_CAT,\r\n" +
+        "  NULL AS TYPE_SCHEM,\r\n" +
+        "  NULL AS TYPE_NAME,\r\n" +
+        "  NULL AS SELF_REFERENCING_COL_NAME,\r\n" +
+        "  NULL AS REF_GENERATION,\r\n" +
+        "  v.VIEW_DEFINITION AS "+_sQUERY_TEXT+"\r\n" +
+        "FROM information_schema.TABLES t\r\n" +
+        "  LEFT JOIN information_schema.VIEWS v\r\n" +
+        "    ON(t.TABLE_CATALOG = v.TABLE_CATALOG AND t.TABLE_SCHEMA = v.TABLE_SCHEMA AND t.TABLE_NAME = v.TABLE_NAME)\r\n");
+
+    // where clause criteria
+    ArrayList<String> whereClauseComponents = new ArrayList<String>();
+    if(schemaPattern != null) {
+      whereClauseComponents.add("t.TABLE_SCHEMA LIKE " + SqlLiterals.formatStringLiteral(schemaPattern));
+    }
+    if(tableNamePattern != null) {
+      whereClauseComponents.add("t.TABLE_NAME LIKE " + SqlLiterals.formatStringLiteral(tableNamePattern));
+    }
+
+    // type criteria
+    if(types != null) 
+    {
+      String sTypeList = "";
+      for(int i = 0; i < types.length; i++) 
+      {
+        if(i > 0)
+          sTypeList += ",";
+        sTypeList += SqlLiterals.formatStringLiteral(types[i]);
+      }
+      whereClauseComponents.add("t.TABLE_TYPE IN (" + sTypeList + ")");
+    }
+
+    if (whereClauseComponents.size() != 0) 
+    {
+      StringBuilder sbWhereClause = new StringBuilder();
+      for(int i = 0; i < whereClauseComponents.size(); i++) 
+      {
+        if(i > 0)
+          sbWhereClause.append(" AND ");
+        sbWhereClause.append(whereClauseComponents.get(i));
+      }
+      sb.append("WHERE ");
+      sb.append(sbWhereClause.toString());
+      sb.append("\r\n");
+    }
+
+    // order according to the JDBC specification
+    sb.append("ORDER BY t.TABLE_TYPE, t.TABLE_CATALOG, t.TABLE_SCHEMA, t.TABLE_NAME");
+
+    Statement stmt = this.getConnection().createStatement();
+    return stmt.unwrap(Statement.class).executeQuery(sb.toString());
+  } /* getTables */
+
   /*------------------------------------------------------------------*/
   /** {@inheritDoc} 
    * is corrected to return the same name as getIndexInfo() */

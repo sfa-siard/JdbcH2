@@ -332,4 +332,19 @@ public class H2DatabaseMetaDataTester extends BaseDatabaseMetaDataTester
     catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
   }
   
+  @Test
+  @Override
+  public void testGetTables()
+  {
+    enter();
+    try { print(_dmdH2.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"TABLE"})); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  }
+  @Test
+  public void testGetViews()
+  {
+    enter();
+    try { print(_dmdH2.getTables(null, TestSqlDatabase._sTEST_SCHEMA, "%", new String[] {"VIEW"})); }
+    catch(SQLException se) { fail(EU.getExceptionMessage(se)); }
+  }
 } /* class H2DatabaseMetaDataTester */
