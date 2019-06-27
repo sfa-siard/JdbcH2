@@ -1,7 +1,7 @@
 Release Notes for JdbcH2 2.1
 ============================
 
-2.1.??
+2.1.32
 Corrected handling of QUERY_TEXT in getTables
 
 2.1.0
