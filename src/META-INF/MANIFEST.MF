@@ -4,9 +4,9 @@ Specification-Title: JDBC
 Specification-Version: 4
 Specification-Vendor: Enter AG, Rüti ZH, Switzerland
 Implementation-Title: H2 JDBC Wrapper
-Implementation-Version: 2.1.44
+Implementation-Version: 2.1.45
 Implementation-Vendor: Enter AG, Rüti ZH, Switzerland
-Built-Date: 12. Nov 2019
+Built-Date: 29. Nov 2019
 Class-Path: h2-1.3.176.jar
   jts-1.14.jar
   jdbcbase.jar
